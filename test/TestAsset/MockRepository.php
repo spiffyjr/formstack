@@ -41,7 +41,7 @@ class MockRepository implements Repository
     public function find(int $userId)
     {
         if ($this->shouldFail) {
-            return null;
+            return false;
         }
         return ['id' => '1', 'firstName' => 'foo', 'lastName' => 'bar', 'email' => 'foo@bar.com'];
     }

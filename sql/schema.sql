@@ -1,5 +1,3 @@
-USE my_app;
-
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (

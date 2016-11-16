@@ -26,10 +26,7 @@ class Pdo implements Repository
     public function delete(int $userId)
     {
         $stmt = $this->pdo->prepare('DELETE FROM user WHERE id = ?');
-
-        if (!$stmt->execute([$userId])) {
-            return $stmt->errorInfo();
-        }
+        $stmt->execute([$userId]);
 
         return $stmt->rowCount() > 0;
     }
@@ -44,16 +41,9 @@ class Pdo implements Repository
         $stmt = $this->pdo->prepare(
             'SELECT id, email, first_name AS firstName, last_name AS lastName FROM user WHERE id = ? LIMIT 1'
         );
+        $stmt->execute([$userId]);
 
-        if (!$stmt->execute([$userId])) {
-            return $stmt->errorInfo();
-        }
-
-        if ($stmt->rowCount() == 0) {
-            return null;
-        }
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -63,10 +53,7 @@ class Pdo implements Repository
     public function findAll()
     {
         $stmt = $this->pdo->prepare('SELECT id, email, first_name as firstName, last_name as lastName FROM user');
-
-        if (!$stmt->execute()) {
-            return $stmt->errorInfo();
-        }
+        $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -89,10 +76,7 @@ class Pdo implements Repository
             'INSERT INTO user (email, first_name, last_name, password) 
              VALUES (:email, :firstName, :lastName, :password)'
         );
-
-        if (!$stmt->execute($data)) {
-            return $stmt->errorInfo();
-        }
+        $stmt->execute($data);
 
         unset($data['password']);
         $data['id'] = $this->pdo->lastInsertId();
@@ -120,12 +104,9 @@ class Pdo implements Repository
             $sql .= sprintf('%s=:%s, ', $this->camelToSnake($key), $key);
         }
 
-        $data['userId'] = $userId;
-        $stmt = $this->pdo->prepare(trim($sql, ', ') . ' WHERE id=:userId');
-
-        if (!$stmt->execute($data)) {
-            return $stmt->errorInfo();
-        }
+        $data['id'] = $userId;
+        $stmt = $this->pdo->prepare(trim($sql, ', ') . ' WHERE id=:id');
+        $stmt->execute($data);
 
         if (isset($data['password'])) {
             unset($data['password']);

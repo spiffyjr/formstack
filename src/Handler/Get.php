@@ -38,7 +38,7 @@ class Get implements Handler
     {
         $user = $this->userRepository->find($this->userId);
 
-        if ($user === null) {
+        if ($user === false) {
             return new JsonResponse('Not Found', 404);
         }
 

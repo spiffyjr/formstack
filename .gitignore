@@ -1,5 +1,6 @@
 /.idea/
 /.vagrant/
+/coverage/
 /vendor/
 /config/config.php
 composer.phar

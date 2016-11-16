@@ -23,12 +23,15 @@ cd formstack
 vagrant up
 vagrant ssh
 cd /vagrant
+cp config/config.php.dist config/config.php
 composer install
 ```
 
+Update `config/config.php` with the credentials for your db.
+
 For a first time installation run the schema file located in `sql/`.
 
-`mysql -u my_app -p < /vagrant/sql/schema.sql`
+`mysql -u my_app -p my_app < /vagrant/sql/schema.sql`
 
 ## Endpoints
 
@@ -38,7 +41,8 @@ For a first time installation run the schema file located in `sql/`.
  * `PUT /:id` - Update a user
  * `DELETE /:id` - Delete a user
 
-For `POST` and `PUT` methods you should use JSON similar to the following:
+For `POST` and `PUT` methods you should use JSON similar to below. Note: Password is optional
+for the `UPDATE` endpoint.
 
 ```json
 {
@@ -50,3 +54,6 @@ For `POST` and `PUT` methods you should use JSON similar to the following:
 ```
 
 For security reasons the password is never displayed.
+
+## Coding Choices
+
