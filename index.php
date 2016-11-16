@@ -16,10 +16,18 @@ $config = require 'config/config.php';
 
 // Good ole' PDO for data access. For rapid development I'd probably use Doctrine ORM, or, at a minimum
 // Doctrine DBAL.
-$pdo = new PDO($config['pdo']['dsn'], $config['pdo']['user'], $config['pdo']['pass']);
+try {
+    $pdo = new PDO($config['pdo']['dsn'], $config['pdo']['user'], $config['pdo']['pass']);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+    exit(1);
+}
+
+// Our UserService that does magical things.
+$userService = new User\UserService($pdo);
 
 $server = Diactoros\Server::createServer(
-    function (Message\ServerRequestInterface $request, Message\ResponseInterface $response, $done) {
+    function (Message\ServerRequestInterface $request, Message\ResponseInterface $response, $done) use ($userService) {
         $path = $request->getServerParams()['REQUEST_URI'];
         $userId = null;
         $handler = null;
@@ -31,16 +39,16 @@ $server = Diactoros\Server::createServer(
 
         if ($request->getMethod() == 'GET') {
             if ($path == '/') {
-                $handler = new Handler\GetAll();
+                $handler = new Handler\GetAll($userService);
             } else if ($userId) {
-                $handler = new Handler\Get($userId);
+                $handler = new Handler\Get($userService, $userId);
             }
         } else if ($request->getMethod() == 'POST' && $path = '/') {
-            $handler = new Handler\Create();
+            $handler = new Handler\Create($userService);
         } else if ($request->getMethod() == 'DELETE' && $userId) {
-            $handler = new Handler\Delete($userId);
+            $handler = new Handler\Delete($userService, $userId);
         } else if ($request->getMethod() == 'PUT') {
-            $handler = new Handler\Update($userId);
+            $handler = new Handler\Update($userService, $userId);
         }
 
         if (!$handler instanceof Handler\Handler) {
