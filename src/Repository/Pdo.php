@@ -21,7 +21,7 @@ class Pdo implements Repository
     /**
      * Deletes a user by id. Returns null on success,.
      * @param int $userId
-     * @return null
+     * @return array|bool
      */
     public function delete(int $userId)
     {
@@ -109,7 +109,7 @@ class Pdo implements Repository
      *   - password (unhashed)
      * @param int $userId
      * @param array $data
-     * @return array
+     * @return array|bool
      */
     public function update(int $userId, array $data)
     {
@@ -129,6 +129,10 @@ class Pdo implements Repository
 
         if (isset($data['password'])) {
             unset($data['password']);
+        }
+
+        if ($stmt->rowCount() == 0) {
+            return false;
         }
 
         return $data;

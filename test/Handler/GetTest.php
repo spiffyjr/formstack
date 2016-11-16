@@ -3,17 +3,33 @@
 namespace User\Handler;
 
 use User\TestAsset\MockRepository;
-use User\UserValidator;
+use Zend\Diactoros\ServerRequest;
 
 class GetTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Create
-     */
-    private $h;
-
-    protected function setUp()
+    public function testSuccess()
     {
-        $this->h = new Create(new MockRepository(), new UserValidator());
+        $repo = new MockRepository();
+
+        $h = new Get($repo, 1);
+        $req = new ServerRequest();
+        $res = $h->__invoke($req);
+
+        $content = json_decode($res->getBody()->getContents(), true);
+
+        $this->assertSame(200, $res->getStatusCode());
+        $this->assertArrayHasKey('data', $content);
+        $this->assertSame($repo->find(1), $content['data']);
+    }
+
+    public function testFailure()
+    {
+        $repo = new MockRepository(true);
+
+        $h = new Get($repo, 1);
+        $req = new ServerRequest();
+        $res = $h->__invoke($req);
+
+        $this->assertSame(404, $res->getStatusCode());
     }
 }

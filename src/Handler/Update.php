@@ -55,6 +55,12 @@ class Update implements Handler
             return new JsonResponse($this->userValidator->getMessages(), 400);
         }
 
-        return new JsonResponse($this->userRepository->update($this->userId, $data));
+        $result = $this->userRepository->update($this->userId, $data);
+
+        if ($result === false) {
+            return new JsonResponse('Not Found', 404);
+        }
+
+        return new JsonResponse($result);
     }
 }

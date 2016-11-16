@@ -7,7 +7,7 @@ interface Repository
     /**
      * Deletes a user by id. Returns null on success,.
      * @param int $userId
-     * @return null
+     * @return array|bool
      */
     public function delete(int $userId);
 
@@ -45,7 +45,7 @@ interface Repository
      *   - password (unhashed)
      * @param int $userId
      * @param array $data
-     * @return array
+     * @return array|bool
      */
     public function update(int $userId, array $data);
 }

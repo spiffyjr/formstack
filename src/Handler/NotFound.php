@@ -14,6 +14,6 @@ class NotFound implements Handler
      */
     public function __invoke(Message\ServerRequestInterface $request) : Message\ResponseInterface
     {
-        return new JsonResponse('Not Found');
+        return new JsonResponse('Not Found', 404);
     }
 }

@@ -40,6 +40,9 @@ class MockRepository implements Repository
      */
     public function find(int $userId)
     {
+        if ($this->shouldFail) {
+            return null;
+        }
         return ['id' => '1', 'firstName' => 'foo', 'lastName' => 'bar', 'email' => 'foo@bar.com'];
     }
 
@@ -49,6 +52,10 @@ class MockRepository implements Repository
      */
     public function findAll()
     {
+        return [
+            ['id' => '1', 'firstName' => 'foo', 'lastName' => 'bar', 'email' => 'foo@bar.com'],
+            ['id' => '2', 'firstName' => 'foo2', 'lastName' => 'bar2', 'email' => 'foo2@bar2.com']
+        ];
     }
 
     /**
@@ -63,7 +70,8 @@ class MockRepository implements Repository
      */
     public function create(array $data)
     {
-        return ['id' => '1', 'firstName' => 'foo', 'lastName' => 'bar', 'email' => 'foo@bar.com'];
+        unset($data['password']);
+        return array_merge(['id' => '1'], $data);
     }
 
     /**
@@ -75,9 +83,14 @@ class MockRepository implements Repository
      *   - password (unhashed)
      * @param int $userId
      * @param array $data
-     * @return array
+     * @return array|bool
      */
     public function update(int $userId, array $data)
     {
+        if ($this->shouldFail) {
+            return false;
+        }
+        unset($data['password']);
+        return array_merge(['id' => '1'], $data);
     }
 }

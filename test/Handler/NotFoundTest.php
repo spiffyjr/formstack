@@ -4,16 +4,20 @@ namespace User\Handler;
 
 use User\TestAsset\MockRepository;
 use User\UserValidator;
+use Zend\Diactoros\ServerRequest;
 
 class NotFoundTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Create
-     */
-    private $h;
-
-    protected function setUp()
+    public function testInvoke()
     {
-        $this->h = new Create(new MockRepository(), new UserValidator());
+        $h = new NotFound();
+        $req = new ServerRequest();
+
+        $res = $h->__invoke($req);
+        $content = json_decode($res->getBody()->getContents(), true);
+
+        $this->assertSame(404, $res->getStatusCode());
+        $this->assertArrayHasKey('data', $content);
+        $this->assertSame('Not Found', $content['data']);
     }
 }
