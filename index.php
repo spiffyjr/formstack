@@ -11,12 +11,26 @@ require 'vendor/autoload.php';
 $server = Diactoros\Server::createServer(
     function (Message\ServerRequestInterface $request, Message\ResponseInterface $response, $done) {
         $path = $request->getServerParams()['REQUEST_URI'];
+        $userId = null;
         $handler = null;
+
+        preg_match('@\/(\d+)$@', $path, $matches);
+        if (!empty($matches)) {
+            $userId = (int) $matches[1];
+        }
 
         if ($request->getMethod() == 'GET') {
             if ($path == '/') {
-
+                $handler = new Handler\GetAll();
+            } else if ($userId) {
+                $handler = new Handler\Get($userId);
             }
+        } else if ($request->getMethod() == 'POST' && $path = '/') {
+            $handler = new Handler\Create();
+        } else if ($request->getMethod() == 'DELETE' && $userId) {
+            $handler = new Handler\Delete($userId);
+        } else if ($request->getMethod() == 'PUT') {
+            $handler = new Handler\Update($userId);
         }
 
         if (!$handler instanceof Handler\Handler) {
