@@ -42,8 +42,8 @@ For `POST` and `PUT` methods you should use JSON similar to the following:
 
 ```json
 {
-    "first_name": "foo",
-    "last_name": "foo",
+    "firstName": "foo",
+    "lastName": "foo",
     "email": "foo@foo.com",
     "password": "foo"
 }
