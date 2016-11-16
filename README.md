@@ -29,3 +29,24 @@ composer install
 For a first time installation run the schema file located in `sql/`.
 
 `mysql -u my_app -p < /vagrant/sql/schema.sql`
+
+## Endpoints
+
+`GET /` - Get all users
+`GET /:id` - Get a single user
+`POST /` - Create a user
+`PUT /:id` - Update a user
+`DELETE /:id` - Delete a user
+
+For `POST` and `PUT` methods you should use JSON similar to the following:
+
+```json
+{
+    "first_name": "foo",
+    "last_name": "foo",
+    "email": "foo@foo.com",
+    "password": "foo"
+}
+```
+
+For security reasons the password is never displayed.
