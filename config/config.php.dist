@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'pdo' => [
+        'dsn' => 'mysql:dbname=my_app;host=127.0.0.1',
+        'user' => 'my_app',
+        'pass' => ''
+    ]
+];

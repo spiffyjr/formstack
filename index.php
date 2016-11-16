@@ -8,6 +8,16 @@ use Zend\Diactoros;
 // I just went with plain ole' PHP. 
 require 'vendor/autoload.php';
 
+// Grab our config, plain ole' PHP object.
+$config = require 'config/config.php';
+
+// Setup dependencies to be injected.
+// No DIC because this app is simple and it's overkill to add one for the sake of adding one
+
+// Good ole' PDO for data access. For rapid development I'd probably use Doctrine ORM, or, at a minimum
+// Doctrine DBAL.
+$pdo = new PDO($config['pdo']['dsn'], $config['pdo']['user'], $config['pdo']['pass']);
+
 $server = Diactoros\Server::createServer(
     function (Message\ServerRequestInterface $request, Message\ResponseInterface $response, $done) {
         $path = $request->getServerParams()['REQUEST_URI'];
