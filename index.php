@@ -59,7 +59,7 @@ $handler = function (
     } elseif ($request->getMethod() == 'DELETE' && $userId) {
         $handler = new Handler\Delete($userRepository, $userId);
     } elseif ($request->getMethod() == 'PUT') {
-        $handler = new Handler\Update($userRepository, $$userValidator, $userId);
+        $handler = new Handler\Update($userRepository, $userValidator, $userId);
     }
 
     if (!$handler instanceof Handler\Handler) {

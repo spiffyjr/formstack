@@ -23,6 +23,7 @@ class GetAll implements Handler
     }
 
     /**
+     * Fulfills Handler contract.
      * @param Message\ServerRequestInterface $request
      * @return Message\ResponseInterface
      */
