@@ -23,9 +23,14 @@ cd formstack
 vagrant up
 vagrant ssh
 cd /vagrant
+
+# don't store your creds in the repo!
 cp config/config.php.dist config/config.php
+
+# deps missing on shipped vagrant box that are required for tests
 sudo apt-get install php7.0-xml
 sudo apt-get install php7.0-sqlite
+
 composer install
 
 # update config/config.php with db password
