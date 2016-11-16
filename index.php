@@ -1,4 +1,5 @@
 <?php
+
 use User\Handler;
 use Psr\Http\Message;
 use Zend\Diactoros;
@@ -23,40 +24,53 @@ try {
     exit(1);
 }
 
-// Our UserService that does magical things.
-$userService = new User\UserService($pdo);
+// Our UserRepository that handles DB communication. It could be more "sophisticated"
+// and hook into a mapper and/or to a service but this is a simple problem that deserves
+// a simple solution. 
+$userRepository = new User\UserRepository($pdo);
+
+// Basic validation for the handlers that require it
+$userValidator = new User\UserValidator();
+
+$handler = function (
+    Message\ServerRequestInterface $request,
+    Message\ResponseInterface $response
+) use (
+    $userRepository,
+    $userValidator
+) {
+    $path = $request->getServerParams()['REQUEST_URI'];
+    $userId = null;
+    $handler = null;
+
+    preg_match('@\/(\d+)$@', $path, $matches);
+    if (!empty($matches)) {
+        $userId = (int) $matches[1];
+    }
+
+    if ($request->getMethod() == 'GET') {
+        if ($path == '/') {
+            $handler = new Handler\GetAll($userRepository);
+        } elseif ($userId) {
+            $handler = new Handler\Get($userRepository, $userId);
+        }
+    } elseif ($request->getMethod() == 'POST' && $path = '/') {
+        $handler = new Handler\Create($userRepository, $userValidator);
+    } elseif ($request->getMethod() == 'DELETE' && $userId) {
+        $handler = new Handler\Delete($userRepository, $userId);
+    } elseif ($request->getMethod() == 'PUT') {
+        $handler = new Handler\Update($userRepository, $$userValidator, $userId);
+    }
+
+    if (!$handler instanceof Handler\Handler) {
+        $handler = new Handler\NotFound();
+    }
+
+    return $handler($request);
+};
 
 $server = Diactoros\Server::createServer(
-    function (Message\ServerRequestInterface $request, Message\ResponseInterface $response, $done) use ($userService) {
-        $path = $request->getServerParams()['REQUEST_URI'];
-        $userId = null;
-        $handler = null;
-
-        preg_match('@\/(\d+)$@', $path, $matches);
-        if (!empty($matches)) {
-            $userId = (int) $matches[1];
-        }
-
-        if ($request->getMethod() == 'GET') {
-            if ($path == '/') {
-                $handler = new Handler\GetAll($userService);
-            } else if ($userId) {
-                $handler = new Handler\Get($userService, $userId);
-            }
-        } else if ($request->getMethod() == 'POST' && $path = '/') {
-            $handler = new Handler\Create($userService);
-        } else if ($request->getMethod() == 'DELETE' && $userId) {
-            $handler = new Handler\Delete($userService, $userId);
-        } else if ($request->getMethod() == 'PUT') {
-            $handler = new Handler\Update($userService, $userId);
-        }
-
-        if (!$handler instanceof Handler\Handler) {
-            $handler = new Handler\NotFound();
-        }
-
-        return $handler($request);
-    },
+    $handler,
     $_SERVER,
     $_GET,
     $_POST,

@@ -15,5 +15,8 @@
         "psr-4": {
             "User\\": "src"
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.7"
     }
 }

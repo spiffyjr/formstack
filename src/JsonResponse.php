@@ -1,10 +1,10 @@
 <?php
 
-namespace User\Response;
+namespace User;
 
-use Zend\Diactoros\Response\JsonResponse;
+use Zend\Diactoros\Response\JsonResponse as BaseJsonResponse;
 
-class Json extends JsonResponse
+class JsonResponse extends BaseJsonResponse
 {
     public function __construct(
         $data,

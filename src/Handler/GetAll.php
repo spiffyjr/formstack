@@ -3,20 +3,31 @@
 namespace User\Handler;
 
 use Psr\Http\Message;
-use User\UserService;
-use User\Response\Json;
+use User\JsonResponse;
+use User\UserRepository;
 
 class GetAll implements Handler
 {
-    private $userService;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(UserService $userService)
+    /**
+     * GetAll constructor.
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
     {
-        $this->userService = $userService;
+        $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param Message\ServerRequestInterface $request
+     * @return Message\ResponseInterface
+     */
     public function __invoke(Message\ServerRequestInterface $request) : Message\ResponseInterface
     {
-        return new Json($this->userService->findAll());
+        return new JsonResponse($this->userRepository->findAll());
     }
 }

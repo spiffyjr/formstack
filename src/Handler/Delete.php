@@ -3,12 +3,12 @@
 namespace User\Handler;
 
 use Psr\Http\Message;
-use User\Response\Json;
+use User\JsonResponse;
 
 class Delete implements Handler
 {
     public function __invoke(Message\ServerRequestInterface $request) : Message\ResponseInterface
     {
-        return new Json('DELETE');
+        return new JsonResponse('DELETE');
     }
 }
