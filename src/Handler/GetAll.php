@@ -4,20 +4,20 @@ namespace User\Handler;
 
 use Psr\Http\Message;
 use User\JsonResponse;
-use User\UserRepository;
+use User\Repository\Repository;
 
 class GetAll implements Handler
 {
     /**
-     * @var UserRepository
+     * @var Repository
      */
     private $userRepository;
 
     /**
      * GetAll constructor.
-     * @param UserRepository $userRepository
+     * @param Repository $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(Repository $userRepository)
     {
         $this->userRepository = $userRepository;
     }

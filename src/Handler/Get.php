@@ -4,12 +4,12 @@ namespace User\Handler;
 
 use Psr\Http\Message;
 use User\JsonResponse;
-use User\UserRepository;
+use User\Repository\Repository;
 
 class Get implements Handler
 {
     /**
-     * @var UserRepository
+     * @var Pdo
      */
     private $userRepository;
 
@@ -20,10 +20,10 @@ class Get implements Handler
 
     /**
      * Get constructor.
-     * @param UserRepository $userRepository
+     * @param Repository $userRepository
      * @param int $userId
      */
-    public function __construct(UserRepository $userRepository, int $userId)
+    public function __construct(Repository $userRepository, int $userId)
     {
         $this->userRepository = $userRepository;
         $this->userId = $userId;

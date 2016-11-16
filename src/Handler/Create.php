@@ -4,13 +4,13 @@ namespace User\Handler;
 
 use Psr\Http\Message;
 use User\JsonResponse;
-use User\UserRepository;
+use User\Repository\Repository;
 use User\UserValidator;
 
 class Create implements Handler
 {
     /**
-     * @var UserRepository
+     * @var Repository
      */
     private $userRepository;
 
@@ -21,10 +21,10 @@ class Create implements Handler
 
     /**
      * Create constructor.
-     * @param UserRepository $userRepository
+     * @param Repository $userRepository
      * @param UserValidator $userValidator
      */
-    public function __construct(UserRepository $userRepository, UserValidator $userValidator)
+    public function __construct(Repository $userRepository, UserValidator $userValidator)
     {
         $this->userRepository = $userRepository;
         $this->userValidator = $userValidator;

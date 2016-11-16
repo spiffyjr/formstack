@@ -7,10 +7,10 @@ use Zend\Diactoros;
 // Basic FrontController. I decided to use Zend\Diactoros which is a server implementation 
 // of PSR-7. I could have used a third-party router/mux but this project is simple enough
 // I just went with plain ole' PHP. 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 // Grab our config, plain ole' PHP object.
-$config = require 'config/config.php';
+$config = require __DIR__ . '/config/config.php';
 
 // Setup dependencies to be injected.
 // No DIC because this app is simple and it's overkill to add one for the sake of adding one
@@ -27,7 +27,7 @@ try {
 // Our UserRepository that handles DB communication. It could be more "sophisticated"
 // and hook into a mapper and/or to a service but this is a simple problem that deserves
 // a simple solution. 
-$userRepository = new User\UserRepository($pdo);
+$userRepository = new User\Repository\Pdo($pdo);
 
 // Basic validation for the handlers that require it
 $userValidator = new User\UserValidator();

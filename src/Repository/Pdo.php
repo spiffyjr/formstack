@@ -1,8 +1,8 @@
 <?php
 
-namespace User;
+namespace User\Repository;
 
-class UserRepository
+class Pdo implements Repository
 {
     /**
      * @var \PDO

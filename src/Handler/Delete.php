@@ -4,12 +4,12 @@ namespace User\Handler;
 
 use Psr\Http\Message;
 use User\JsonResponse;
-use User\UserRepository;
+use User\Repository\Repository;
 
 class Delete implements Handler
 {
     /**
-     * @var UserRepository
+     * @var Repository
      */
     private $userRepository;
 
@@ -19,11 +19,11 @@ class Delete implements Handler
     private $userId;
 
     /**
-     * @param UserRepository $userRepository
+     * @param Repository $userRepository
      * @param int $userId
      * @internal param UserValidator $userValidator
      */
-    public function __construct(UserRepository $userRepository, int $userId)
+    public function __construct(Repository $userRepository, int $userId)
     {
         $this->userRepository = $userRepository;
         $this->userId = $userId;
