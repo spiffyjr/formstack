@@ -32,11 +32,11 @@ For a first time installation run the schema file located in `sql/`.
 
 ## Endpoints
 
-`GET /` - Get all users
-`GET /:id` - Get a single user
-`POST /` - Create a user
-`PUT /:id` - Update a user
-`DELETE /:id` - Delete a user
+ * `GET /` - Get all users
+ * `GET /:id` - Get a single user
+ * `POST /` - Create a user
+ * `PUT /:id` - Update a user
+ * `DELETE /:id` - Delete a user
 
 For `POST` and `PUT` methods you should use JSON similar to the following:
 
